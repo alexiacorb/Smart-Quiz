@@ -1,98 +1,145 @@
-.calendar-wrapper {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    max-width: 1000px;
-    margin: 0 auto; /* Centram pe pagina */
+
+body {
+    overflow-y: auto; 
+    height: auto;
 }
 
-/* Navigarea de sus (Prev/Next) */
+main {
+    width: 100vw;
+    position: relative;
+}
+
+.calendar-wrapper {
+    width: 100%;
+    height: 100%; 
+    display: flex;
+    flex-direction: column; 
+    padding: 0 10px 10px 10px;
+    max-width: none;
+    margin: 0;
+}
+
 .calendar-navigation {
+    flex: 0 0 auto; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 15px;
+    padding: 10px 0;
+    margin-bottom: 0;
 }
 
-.nav-btn {
-    text-decoration: none;
+h2 {
+    font-size: 1.5rem;
+    margin: 0;
     color: #003459;
-    font-weight: bold;
-    padding: 5px 10px;
 }
 
-/* Asezarea lunilor una langa alta */
 .months-container {
-    display: flex;
-    gap: 40px; /* Spatiu intre calendare */
-    justify-content: center;
-    flex-wrap: wrap; 
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 50% - 50% */
+    gap: 30px; /* Spațiu generos între calendare */
+    align-items: start;
 }
 
 .single-month {
-    flex: 1;
-    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    border: 1px solid #191A0F;
+    border-radius: 8px;
+    background: #E5E5E6;
 }
 
-.month-title {
+ h3 {
+    margin: 10px 0;
+    flex: 0 0 auto; 
     text-align: center;
-    color: #003459;
-    margin-bottom: 15px;
 }
 
-/* TABELUL - Partea care lipsea in poza ta */
 .calendar-table {
     width: 100%;
-    border-collapse: collapse; /* Lipeste bordurile */
-    table-layout: fixed; /* Celule egale */
+    height: 100%; 
+    border-collapse: collapse;
+    table-layout: fixed; 
+}
+
+.calendar-table thead {
+    height: 30px; 
 }
 
 .calendar-table th {
-    color: #88B9C6;
-    padding-bottom: 10px;
-    font-size: 0.9rem;
+    background: #003459;
+    color: #E5E5E6;
+    font-size: 1rem;
+    padding: 5px;
 }
 
 .calendar-table td {
-    height: 60px; /* Inaltime fixa ca sa incapa punctele */
-    border: 1px solid #ddd; /* Bordura gri */
-    vertical-align: top; /* Textul sus */
+    height: 13vh;
+    border: 1px solid #191A0F;
+    vertical-align: top;
     padding: 5px;
     position: relative;
-    background-color: #fff;
 }
 
 .day-number {
-    font-size: 12px;
+    font-size: 1.1rem;
     font-weight: bold;
-    color: #333;
+    color: #191A0F;
+    margin-bottom: 5px;
     display: block;
+    text-align: right; 
 }
 
-/* Ziua curenta */
 .today {
-    background-color: #e8f4f8 !important;
-    border: 1px solid #003459;
+    background-color: rgba(136, 185, 198, 0.2) !important;
+    border: 2px solid #003459;
 }
 
-/* --- PUNCTELE PENTRU TESTE --- */
-/* Fara asta, punctele au inaltime 0 si nu se vad */
-.dots-container {
+.testContainer {
     display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
-    margin-top: 4px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 100%; 
+    overflow-y: auto; 
 }
 
-.event-dot {
-    width: 10px;  /* Marime punct */
-    height: 10px; /* Marime punct */
-    background-color: #FF4500; /* Rosu/Portocaliu */
-    border-radius: 50%; /* Cerc perfect */
-    display: block; /* Obligatoriu ca sa se vada */
+.testLabel {
+    background-color: #214E34;
+    color: #E5E5E6;
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+}
+
+.nav-btn {
+    background-color: #214E34;
+    color: #E5E5E6;
+    border: none;
+    padding: 8px 16px;
     cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+@media (max-width: 780px) {
+    .months-container {
+        grid-template-columns: 1fr; 
+    }
+    .calendar-table th {
+        font-size: 0.8rem; 
+        padding: 2px;
+    }
+    
+    .day-number {
+        font-size: 0.9rem;
+    }
+    
+    .calendar-table td {
+        height: 100px; 
+    }
 }

@@ -95,3 +95,25 @@ cursor: pointer;
     color: #CCCCCC;
 }
 
+@media (max-width: 768px) {
+    .review {
+        width: 90%; 
+    }
+
+    h1 {
+        font-size: 1.8rem; 
+        margin-top: 10%;
+    }
+
+    p {
+        margin-left: 0;
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .submit-btn {
+        width: 100%; 
+        padding: 15px;
+    }
+}
+

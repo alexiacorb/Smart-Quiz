@@ -7,6 +7,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/upcoming.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -20,7 +21,7 @@
                     <a href="{% url 'classes' %}">Tehnologii Web</a>
                 </div>
             </div>
-            <a href="{% url 'home' %}">Upcoming tests</a>
+            <a href="{% url 'upcoming' %}">Upcoming tests</a>
             <a href="{% url 'feedback' %}">Feedback</a>
             <!-- Functie Django predefinita de log out --> 
             <form method="post" action="{% url 'logout' %}">
@@ -34,14 +35,13 @@
         <div class="calendar-wrapper">
             <div class="calendar-navigation">
                 <a href="?year={{ prev_year }}&month={{ prev_month }}" class="nav-btn">&lt; Prev</a>
-                <h2>Upcoming Tests</h2>
                 <a href="?year={{ next_year }}&month={{ next_month }}" class="nav-btn">Next &gt;</a>
             </div>
         
             <div class="months-container">
                 {% for cal in calendars_data %}
                     <div class="single-month">
-                        <h3 class="month-title">{{ cal.month_name }} {{ cal.year }}</h3>
+                        <h3 >{{ cal.month_name }} {{ cal.year }}</h3>
                         
                         <table class="calendar-table">
                             <thead>
@@ -54,17 +54,19 @@
                                 <tr>
                                     {% for day in week %}
                                         {% if day == 0 %}
-                                            <td class="empty"></td>
+                                            <td></td>
                                         {% else %}
                                             <td class="day {% if day == today_day and cal.month == today_month and cal.year == today_year %}today{% endif %}">
                                                 
                                                 <span class="day-number">{{ day }}</span>
                                                 
-                                                <div class="dots-container">
+                                                <div class="testContainer">
                                                     {% for key, values in cal.tests_dict.items %}
                                                         {% if key == day %}
-                                                            {% for test in values %}
-                                                                <div class="event-dot" title="{{ test.title }}"></div>
+                                                            {% for test in values %}           
+                                                                <div class="testLabel">
+                                                                     {{ test.class_name }}
+                                                                </div>
                                                             {% endfor %}
                                                         {% endif %}
                                                     {% endfor %}

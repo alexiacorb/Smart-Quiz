@@ -74,3 +74,77 @@ footer{
     padding: 20px 0;
     text-align: right;
 }
+
+@media (max-width: 768px) {
+    nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between; 
+        height: 60px;
+        padding: 0 15px;
+    }
+
+    nav a img {
+        width: 35px;
+        height: 35px;
+        display: block;
+        margin: 0;
+    }
+
+    nav .dropdown {
+        display: none !important;
+    }
+
+    nav a[href*="upcoming"], 
+    nav a[href*="feedback"], 
+    nav form button {
+        font-size: 0 !important; 
+        background: transparent !important;
+        border: none;
+        padding: 10px;
+        margin-left: 10px;
+        position: relative;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #E5E5E6; 
+    }
+    
+    nav a[href*="upcoming"]::before, 
+    nav a[href*="feedback"]::before, 
+    .logout-btn::before {
+        font-family: "Font Awesome 6 Free"; 
+        font-weight: 900; 
+        font-size: 20px;  
+        display: block;
+    }
+
+    nav a[href*="upcoming"]::before {
+        content: "\f073"; 
+    }
+
+    nav a[href*="feedback"]::before {
+        content: "\f086"; 
+    }
+
+    .logout-btn::before {
+        content: "\f2f5"; 
+        color: #E5E5E6
+    }
+    
+    .logout-btn {
+        width: auto;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    footer {
+        position: fixed;
+        text-align: center;
+        padding: 15px 10px;
+    }
+    
+    
+}
