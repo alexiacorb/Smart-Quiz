@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Home</title>
     {% load static %}
-    <link rel="stylesheet"  href="{% static 'CSS/main.css' %}">
-    <link rel="stylesheet"  href="{% static 'CSS/home.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/home.css' %}">
 </head>
 
 <body>
@@ -15,54 +16,87 @@
         <nav>
             <a href="{% url 'home' %}"> <img src="../static/MEDIA/logo1.png" alt="Logo"></a>
             <div class="dropdown">
-            <a href="{% url 'home' %}" class="dropLink">Classes</a>
+                <a href="{% url 'home' %}" class="dropLink">Classes</a>
                 <div class="classList" id="classList">
-                
+
                     <!-- Lista de clase va aici -->
-                     <a href="{% url 'classes' %}">Tehnologii Web</a>
+                    <a href="{% url 'classes' %}">Tehnologii Web</a>
                 </div>
             </div>
             <a href="{% url 'upcoming' %}">Upcoming tests</a>
             <a href="{% url 'feedback' %}">Feedback</a>
-            <!-- Functie Django predefinita de log out --> 
+            <!-- Functie Django predefinita de log out -->
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %} <button type="submit" class="logout-btn">
-                Logout
+                    Logout
                 </button>
             </form>
         </nav>
     </header>
+
     <main>
         <div class="cardsContainer">
             <div class="card" onclick="location.href = '{% url 'classes' %}' ;">
                 <div class="cardHeader">
-                    <h2>Tehnologii Web</h2> </div>
-                <div class="cardBody">
-                    <p>Laborator de tehnologii Web</p> </div>
-                    <span class="classCode">Code: TW1234</span>
-            </div>
-            
-        </div>
-
-        <div class="popup" id="popup">
-            <form action="" class="form-popup" id="formPopup">
-                <h2>Create New Class</h2>
-                <input type="text" id="className" name="className" placeholder="Class Name" required>
-                <textarea  id="details" name="details" placeholder="Details"></textarea>
-                <div class="buttons">
-                    <button type="submit" id="class">Create Class</button>
-                    <button type="button" id="closePopup">Cancel</button>
+                    <h2>Tehnologii Web</h2>
                 </div>
-            </form>
+                <div class="cardBody">
+                    <p>Laborator de tehnologii Web</p>
+                </div>
+                <span class="classCode">Code: TW1234</span>
+            </div>
+
         </div>
 
-        
+
     </main>
+
+    {% if request.user.profile.role == "student" %}
+
+    <div class="popup" id="popup-student">
+        <form action="{% url 'join_class' %}" method="POST" class="form-popup">
+            {% csrf_token %}
+            <h2>Join New Class</h2>
+            <input type="text" id="classCode" name="classCode" placeholder="Class Code" required>
+            <div class="buttons">
+                <button type="submit" id="class">Join Class</button>
+                <button type="button" id="closePopup">Cancel</button>
+            </div>
+        </form>
+    </div>
+
     <footer>
         <button id="createClass" class="createClass">
             +
         </button>
     </footer>
+
+    {% endif %}
+
+    {% if request.user.profile.role == "teacher" %}
+
+    <div class="popup" id="popup">
+        <form action="{% url 'create_class' %}" method="POST" class="form-popup">
+            {% csrf_token %}
+            <h2>Create New Class</h2>
+            <input type="text" id="className" name="className" placeholder="Class Name" required>
+            <textarea id="details" name="details" placeholder="Details"></textarea>
+            <div class="buttons">
+                <button type="submit" id="class">Create Class</button>
+                <button type="button" id="closePopup">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+
+    <footer>
+        <button id="createClass" class="createClass">
+            +
+        </button>
+    </footer>
+    {% endif %}
+
     <script src="{% static 'JS/home.js' %}"></script>
 </body>
+
 </html>

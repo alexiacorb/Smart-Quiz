@@ -1,21 +1,111 @@
 from urllib import request
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login as auth_login
 import calendar
 from datetime import datetime, date, timedelta
 #from myapp.models import Class, Test
+from .models import Review, Class
+from .forms import ReviewForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
-from myapp.models import Review
-from myapp.forms import ReviewForm
 
-def login(request):
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+            return redirect('home')  
+        else:
+            return render(request, "login.html", {
+                "error": "Invalid username or password."
+            })
+
     return render(request, "login.html")
-def register(request):
+
+
+def register_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        role = request.POST["role"]
+
+        if User.objects.filter(username=username).exists():
+            return render(request, "register.html", {"error": "Username already exists"})
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        user.profile.role = role
+        user.profile.save()
+
+        return redirect("login")
+
     return render(request, "register.html")
+
+@login_required
+def create_class(request):
+    if request.method == "POST":
+        if request.user.profile.role != "teacher":
+            return HttpResponseForbidden("Only teachers can create classes.")
+
+        name = request.POST.get("className")
+        details = request.POST.get("details")
+
+        new_class = Class.objects.create(
+            teacher=request.user,
+            name=name,
+            details=details
+        )
+
+        return redirect("home")
+
+    return redirect("home")
+
+@login_required
+def join_class(request):
+    if request.method == "POST":
+        if request.user.profile.role != "student":
+            return HttpResponseForbidden("Only students can join classes.")
+
+        class_code = request.POST.get("classCode")
+
+        try:
+            class_obj = Class.objects.get(code=class_code)
+        except Class.DoesNotExist:
+            return render(request, "home.html", {"error": "Invalid class code."})
+
+        class_obj.students.add(request.user)
+        return redirect("home")
+
+    return redirect("home")
+
+
+
+@login_required(login_url='login')
 def home(request):
-    return render(request, "home.html")
+    if request.user.profile.role == "teacher":
+        classes = request.user.classes_created.all()
+    else:
+        classes = request.user.classes_joined.all()
+
+    return render(request, "home.html", {"classes": classes})
+
+
+@login_required(login_url='login')
 def classes(request):
     return render(request, "classes.html")
+
+@login_required(login_url='login')
 def feedback(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -32,6 +122,8 @@ class MockTest:
         self.title = title
         self.date = test_date # Trebuie sa fie obiect de tip date()
         self.class_name = class_name
+
+@login_required(login_url='login')
 def upcoming(request):
 
     classes = [
@@ -129,6 +221,7 @@ def upcoming(request):
     
     return render(request, "upcoming.html", context)
 
+@login_required(login_url='login')
 def logout_view(request):
     logout(request)
     return redirect('login')
