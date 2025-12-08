@@ -1,0 +1,98 @@
+.calendar-wrapper {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    margin: 0 auto; /* Centram pe pagina */
+}
+
+/* Navigarea de sus (Prev/Next) */
+.calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: #003459;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+/* Asezarea lunilor una langa alta */
+.months-container {
+    display: flex;
+    gap: 40px; /* Spatiu intre calendare */
+    justify-content: center;
+    flex-wrap: wrap; 
+}
+
+.single-month {
+    flex: 1;
+    min-width: 300px;
+}
+
+.month-title {
+    text-align: center;
+    color: #003459;
+    margin-bottom: 15px;
+}
+
+/* TABELUL - Partea care lipsea in poza ta */
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse; /* Lipeste bordurile */
+    table-layout: fixed; /* Celule egale */
+}
+
+.calendar-table th {
+    color: #88B9C6;
+    padding-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.calendar-table td {
+    height: 60px; /* Inaltime fixa ca sa incapa punctele */
+    border: 1px solid #ddd; /* Bordura gri */
+    vertical-align: top; /* Textul sus */
+    padding: 5px;
+    position: relative;
+    background-color: #fff;
+}
+
+.day-number {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+}
+
+/* Ziua curenta */
+.today {
+    background-color: #e8f4f8 !important;
+    border: 1px solid #003459;
+}
+
+/* --- PUNCTELE PENTRU TESTE --- */
+/* Fara asta, punctele au inaltime 0 si nu se vad */
+.dots-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 4px;
+    justify-content: center;
+}
+
+.event-dot {
+    width: 10px;  /* Marime punct */
+    height: 10px; /* Marime punct */
+    background-color: #FF4500; /* Rosu/Portocaliu */
+    border-radius: 50%; /* Cerc perfect */
+    display: block; /* Obligatoriu ca sa se vada */
+    cursor: pointer;
+}

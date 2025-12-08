@@ -1,0 +1,128 @@
+
+.createClass{
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 1%;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    background-color: #003459;
+    color: #E5E5E6;
+}
+
+.popup{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #88B9C6;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.389);
+    z-index: 1000;
+    visibility: hidden;
+    border: 2px solid;
+    border-color: #003459;
+    border-radius: 5px;
+    width: 40%;
+}
+
+.popup.open-popup{
+    display: block;
+    visibility: visible;
+}
+
+.form-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+
+input, textarea{
+    background-color: #E5E5E6;
+    border: none;
+    border-bottom: 2px solid #214E34;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    margin-bottom:5%;
+}
+textarea{
+    resize: vertical;
+}
+
+input:hover, textarea:hover{
+    border: 2px solid #214E34;
+}
+
+
+h1{
+    margin: 0 0 5%;
+    color: #191A0F;
+}
+
+.form-popup button{
+    background-color: #003459;
+    color: #E5E5E6;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: row;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px; 
+    justify-content: flex-start;
+}
+
+.card{
+    background-color: #88B9C6;
+    border: 2px solid #003459;
+    border-radius: 5px;
+    width: 25%;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+.cardHeader {
+    background-color: #003459;
+    color: #E5E5E6;
+    padding: 15px;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+}
+
+.cardBody {
+    padding: 15px;
+    color: #191A0F;
+    text-align: center;
+}
+.classCode {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #214E34;
+    text-align: center;
+}
+

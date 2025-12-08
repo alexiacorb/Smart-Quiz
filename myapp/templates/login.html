@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="icon" type="image/jpg" href="../Images/logo1.png" class="logo">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/main.css' %}">
+    <script src="https://kit.fontawesome.com/a14ac632d0.js" crossorigin="anonymous"></script>
+    <title>Login</title>
+</head>
+<body>
+    {% block content %}
+    <div class="container" id="container">
+        <div class="left">
+                    <h1>Welcome Back!</h1>
+                    <p>Don't have an account? Sign-up now</p>
+                    <button class="ghost" id="createAccount">Create Account</button>
+        </div>
+        <div class="sign-in">
+            <form>
+                 <h1>Login</h1> 
+                 <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+    <script src="{% static 'JS/login.js' %}"></script>
+</body>
+</html>

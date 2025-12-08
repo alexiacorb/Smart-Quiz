@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="../Images/logo1.png" class="logo">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/main.css' %}">
+    <title>Register</title>
+</head>
+<body>
+
+    {% block content %}
+    <div class="container" id="container">
+        <div class="left">
+                    <h1>Welcome!</h1>
+                    <p>Already have an account? Login now</p>
+                    <button class="ghost" id="login">Login</button>
+        </div>
+        <div class="sign-in">
+            <form class="login-form">
+                <h1>Create Account</h1> 
+                    <input type="text" placeholder="Username" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Password" required>
+                    <select name="role" required>
+                        <option value="" disabled selected>Select Role</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                <button type="submit">Create Account</button>       
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+    <script src="{% static 'JS/register.js' %}"></script>
+     
+</body>
+</html>

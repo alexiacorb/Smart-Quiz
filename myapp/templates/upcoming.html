@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Tests</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/upcoming.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}"> <img src="{% static 'MEDIA/logo1.png' %}" alt="Logo"></a>
+            <div class="dropdown">
+            <a href="{% url 'home' %}" class="dropLink">Classes</a>
+                <div class="classList" id="classList">
+                
+                    <!-- Lista de clase va aici -->
+                    <a href="{% url 'classes' %}">Tehnologii Web</a>
+                </div>
+            </div>
+            <a href="{% url 'home' %}">Upcoming tests</a>
+            <a href="{% url 'feedback' %}">Feedback</a>
+            <!-- Functie Django predefinita de log out --> 
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %} <button type="submit" class="logout-btn">
+                Logout
+                </button>
+            </form>
+        </nav>
+    </header>
+   <main>
+        <div class="calendar-wrapper">
+            <div class="calendar-navigation">
+                <a href="?year={{ prev_year }}&month={{ prev_month }}" class="nav-btn">&lt; Prev</a>
+                <h2>Upcoming Tests</h2>
+                <a href="?year={{ next_year }}&month={{ next_month }}" class="nav-btn">Next &gt;</a>
+            </div>
+        
+            <div class="months-container">
+                {% for cal in calendars_data %}
+                    <div class="single-month">
+                        <h3 class="month-title">{{ cal.month_name }} {{ cal.year }}</h3>
+                        
+                        <table class="calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for week in cal.matrix %}
+                                <tr>
+                                    {% for day in week %}
+                                        {% if day == 0 %}
+                                            <td class="empty"></td>
+                                        {% else %}
+                                            <td class="day {% if day == today_day and cal.month == today_month and cal.year == today_year %}today{% endif %}">
+                                                
+                                                <span class="day-number">{{ day }}</span>
+                                                
+                                                <div class="dots-container">
+                                                    {% for key, values in cal.tests_dict.items %}
+                                                        {% if key == day %}
+                                                            {% for test in values %}
+                                                                <div class="event-dot" title="{{ test.title }}"></div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
