@@ -52,4 +52,6 @@ Echipa este alcătuită din Ciucheș Cristina, Ciocan Daniel și Corb Alexia
   ```
 - accesarea link ului primit în terminal
   http://127.0.0.1:8000/
-  
+## Diagrama de arhitectură 
+![Diagrama](diagrama.jpg)
+
