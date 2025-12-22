@@ -1,18 +1,20 @@
-.logo{
+.logo {
     size: 5px;
     border-radius: 5px;
 }
-*{
-    margin:0; 
+
+* {
+    margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
 }
-body{
-    background:#E5E5E6;
+
+body {
+    background: #E5E5E6;
 }
 
-img{
+img {
     width: 50px;
     height: 50px;
 }
@@ -23,11 +25,12 @@ nav a {
     text-transform: uppercase;
     cursor: pointer;
 }
+
 nav a:hover {
     text-decoration: underline;
 }
 
-nav{
+nav {
     background-color: #003459;
     display: flex;
     justify-content: space-between;
@@ -35,30 +38,30 @@ nav{
     padding: 10px 20px;
 }
 
-.dropdown{
+.dropdown {
     position: relative;
     display: inline-block;
 }
 
-.classList{
+.classList {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #88b8c6d0;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
 
-.classList a:hover {
-    background-color: #f1f1f1;
+.classList a {
+    color: #191A0F;
 }
 
 .dropdown:hover .classList {
     display: block;
 }
 
-.logout-btn{
+.logout-btn {
     background-color: #88B9C6;
     color: #191A0F;
     border: none;
@@ -67,10 +70,84 @@ nav{
     border-radius: 5px;
 }
 
-footer{
+footer {
     position: fixed;
     bottom: 0;
     width: 100%;
     padding: 20px 0;
     text-align: right;
+}
+
+@media (max-width: 768px) {
+    nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+        padding: 0 15px;
+    }
+
+    nav a img {
+        width: 35px;
+        height: 35px;
+        display: block;
+        margin: 0;
+    }
+
+    nav .dropdown {
+        display: none !important;
+    }
+
+    nav a[href*="upcoming"],
+    nav a[href*="feedback"],
+    nav form button {
+        font-size: 0 !important;
+        background: transparent !important;
+        border: none;
+        padding: 10px;
+        margin-left: 10px;
+        position: relative;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #E5E5E6;
+    }
+
+    nav a[href*="upcoming"]::before,
+    nav a[href*="feedback"]::before,
+    .logout-btn::before {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 20px;
+        display: block;
+    }
+
+    nav a[href*="upcoming"]::before {
+        content: "\f073";
+    }
+
+    nav a[href*="feedback"]::before {
+        content: "\f086";
+    }
+
+    .logout-btn::before {
+        content: "\f2f5";
+        color: #E5E5E6
+    }
+
+    .logout-btn {
+        width: auto;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    footer {
+        position: fixed;
+        text-align: center;
+        padding: 15px 10px;
+    }
+
+
 }

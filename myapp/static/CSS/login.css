@@ -94,3 +94,42 @@ p{
     color: #191A0F;
     margin-bottom: 5%;
 }
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%; 
+        height: auto; 
+        min-height: 80vh;
+        position: relative; 
+        transform: none;
+        top: 0; 
+        left: 0;
+        margin: 20px auto; 
+        flex-direction: column; 
+    }
+
+    .left {
+        width: 100%;
+        height: 150px; 
+        padding: 20px;
+        order: -1; 
+    }
+
+    .sign-in {
+        width: 100%;
+        left: 0;
+        padding: 20px 0;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    input, select {
+        width: 90%;
+    }
+    
+    button {
+        width: 90%; 
+    }
+}

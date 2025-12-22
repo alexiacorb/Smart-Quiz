@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class_obj.name }} - Class</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/classes.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    {% include 'features/navbar.html' %}
+
+    <main class="class-page">
+        <section class="class-header">
+            <h1>{{ class_obj.name }}</h1>
+            <p class="class-details">{{ class_obj.details }}</p>
+            <p><strong>Teacher:</strong> {{ class_obj.teacher.username }}</p>
+            <p><strong>Code:</strong> {{ class_obj.code }}</p>
+            <p><strong>Created at:</strong> {{ class_obj.created_at }}</p>
+            {% if request.user == class_obj.teacher %}
+                <a href="{% url 'class_grades' class_obj.id %}" style="display: inline-block; margin-top: 15px; padding: 10px 15px; background: #333; color: white; text-decoration: none; border-radius: 5px;">View Grades</a>
+            {% endif %}
+        </section>
+
+        <section class="class-students">
+            <h2>Students</h2>
+            {% if students %}
+            <ul>
+                {% for s in students %}
+                <li>{{ s.username }}{% if s.email %} - {{ s.email }}{% endif %}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No students enrolled yet.</p>
+            {% endif %}
+        </section>
+
+    </main>
+</body>
+
+</html>

@@ -126,3 +126,29 @@ h1{
     text-align: center;
 }
 
+@media (max-width: 768px) {
+    .card {
+        width: 100%; 
+        margin: 10px 0;
+    }
+
+    .cardsContainer {
+        padding: 10px;
+        justify-content: center;
+    }
+
+    .popup {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-popup button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}

@@ -1,10 +1,10 @@
 from urllib import request
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import logout, authenticate, login as auth_login
 import calendar
 from datetime import datetime, date, timedelta
 #from myapp.models import Class, Test
-from .models import Review, Class
+from .models import Review, Class, Grade
 from .forms import ReviewForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -105,6 +105,22 @@ def home(request):
 def classes(request):
     return render(request, "classes.html")
 
+
+@login_required(login_url='login')
+def class_detail(request, class_id):
+    class_obj = get_object_or_404(Class, id=class_id)
+
+    # Only the class teacher or a student enrolled in the class can view details
+    if request.user != class_obj.teacher and request.user not in class_obj.students.all():
+        return HttpResponseForbidden("You don't have permission to view this class.")
+
+    students = class_obj.students.all()
+
+    return render(request, 'class_detail.html', {
+        'class_obj': class_obj,
+        'students': students,
+    })
+
 @login_required(login_url='login')
 def feedback(request):
     if request.method == 'POST':
@@ -125,12 +141,11 @@ class MockTest:
 
 @login_required(login_url='login')
 def upcoming(request):
-
-    classes = [
-        {'name': 'Tehnologii Web', 'details': 'Laborator de Tehnologii Web'},
-    ]
+    if request.user.profile.role == "teacher":
+        classes = request.user.classes_created.all()
+    else:
+        classes = request.user.classes_joined.all()
     
-    # 1. Determinam anul si luna de START (de la care incepem afisarea)
     today = datetime.now()
     req_year = request.GET.get('year')
     req_month = request.GET.get('month')
@@ -148,7 +163,6 @@ def upcoming(request):
         MockTest("Proiect SQL", date(start_year, start_month, 20), "Tehnologii Web"),      # Tot ziua 20 (2 puncte)
     ]
     
-    # Calculam luna a 2-a pentru testele false
     next_m = start_month + 1 if start_month < 12 else 1
     next_y = start_year if start_month < 12 else start_year + 1
     
@@ -158,19 +172,15 @@ def upcoming(request):
     current_iter_year = start_year
     current_iter_month = start_month
 
-    # Iteram de 2 ori (Luna Curenta + Urmatoarea)
     for i in range(2):
         cal_matrix = calendar.monthcalendar(current_iter_year, current_iter_month)
         month_name = calendar.month_name[current_iter_month]
 
-        # --- FILTRARE MANUALA (In loc de Database Query) ---
-        # Cautam in lista noastra fake testele care sunt in luna curenta a buclei
         tests_in_this_month = []
         for t in fake_tests_db:
             if t.date.year == current_iter_year and t.date.month == current_iter_month:
                 tests_in_this_month.append(t)
         
-        # Le punem in dictionar pe zile
         tests_dict = {}
         for test in tests_in_this_month:
             day = test.date.day
@@ -191,7 +201,6 @@ def upcoming(request):
             current_iter_month = 1
             current_iter_year += 1
 
-    # Logica butoanelor Next/Prev ramane neschimbata
     prev_date = date(start_year, start_month, 1)
     if start_month == 1:
         prev_month = 12
@@ -208,7 +217,7 @@ def upcoming(request):
         next_year = start_year
 
     context = {
-        'classes': classes, # Trimitem lista falsa
+        'classes': classes,
         'calendars_data': calendars_data,
         'today_day': today.day,
         'today_month': today.month,
@@ -225,3 +234,40 @@ def upcoming(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+def my_grades(request):
+    if request.user.profile.role != "student":
+        return HttpResponseForbidden("Only students can view their grades.")
+    
+    grades = Grade.objects.filter(student=request.user).select_related('class_obj')
+    
+    return render(request, 'my_grades.html', {'grades': grades})
+
+
+@login_required(login_url='login')
+def class_grades(request, class_id):
+    class_obj = get_object_or_404(Class, id=class_id)
+    
+    if request.user != class_obj.teacher:
+        return HttpResponseForbidden("Only the class teacher can view student grades.")
+    
+    grades = Grade.objects.filter(class_obj=class_obj).select_related('student')
+    students = class_obj.students.all()
+    
+    grades_dict = {grade.student.id: grade for grade in grades}
+    
+    student_grades = []
+    for student in students:
+        grade = grades_dict.get(student.id)
+        student_grades.append({
+            'student': student,
+            'grade': grade
+        })
+    
+    return render(request, 'class_grades.html', {
+        'class_obj': class_obj,
+        'student_grades': student_grades,
+        'students': students,
+    })

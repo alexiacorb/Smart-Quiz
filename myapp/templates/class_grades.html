@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class_obj.name }} - Grades</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .class-info {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .class-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .students-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .student-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 18px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-email {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .grade-section {
+            text-align: right;
+            min-width: 150px;
+        }
+
+        .grade-badge {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .grade-badge.excellent {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .grade-badge.good {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .grade-badge.satisfactory {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .grade-badge.poor {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .no-grade {
+            background-color: #e0e0e0;
+            color: #666;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .grade-notes {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            max-width: 200px;
+            text-align: right;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'features/navbar.html' %}
+
+    <main>
+        <h1>{{ class_obj.name }} - Student Grades</h1>
+
+        <div class="class-info">
+            <p><strong>Class Code:</strong> {{ class_obj.code }}</p>
+            <p><strong>Students Enrolled:</strong> {{ students.count }}</p>
+            <p><strong>Created:</strong> {{ class_obj.created_at|date:"d M Y" }}</p>
+        </div>
+
+        {% if student_grades %}
+        <div class="students-container">
+            {% for item in student_grades %}
+            <div class="student-card">
+                <div class="student-info">
+                    <div class="student-name">{{ item.student.username }}</div>
+                    <div class="student-email">{{ item.student.email }}</div>
+                </div>
+                <div class="grade-section">
+                    {% if item.grade %}
+                    <div class="grade-badge 
+                            {% if item.grade.grade >= 9 %}excellent
+                            {% elif item.grade.grade >= 7 %}good
+                            {% elif item.grade.grade >= 5 %}satisfactory
+                            {% else %}poor
+                            {% endif %}">
+                        {{ item.grade.grade }}
+                    </div>
+                    {% if item.grade.notes %}
+                    <div class="grade-notes">
+                        <strong>Notes:</strong> {{ item.grade.notes }}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="no-grade">No Grade Yet</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-data">
+            <p>No students enrolled yet.</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+
+</html>

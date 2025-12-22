@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Grades</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .grades-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grade-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .grade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .class-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .grade-badge {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 50%;
+            text-align: center;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grade-badge.excellent {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .grade-badge.good {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .grade-badge.satisfactory {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .grade-badge.poor {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .grade-notes {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .updated-at {
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .no-grades {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'features/navbar.html' %}
+
+    <main>
+        <h1>My Grades</h1>
+
+        {% if grades %}
+        <div class="grades-container">
+            {% for grade in grades %}
+            <div class="grade-card">
+                <div class="grade-header">
+                    <div class="class-name">{{ grade.class_obj.name }}</div>
+                    <div class="grade-badge 
+                                {% if grade.grade >= 9 %}excellent
+                                {% elif grade.grade >= 7 %}good
+                                {% elif grade.grade >= 5 %}satisfactory
+                                {% else %}poor
+                                {% endif %}">
+                        {{ grade.grade }}
+                    </div>
+                </div>
+                {% if grade.notes %}
+                <div class="grade-notes">
+                    <strong>Notes:</strong> {{ grade.notes }}
+                </div>
+                {% endif %}
+                <div class="updated-at">
+                    Last updated: {{ grade.updated_at|date:"d M Y, H:i" }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-grades">
+            <p>You don't have any grades yet.</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+
+</html>
