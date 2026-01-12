@@ -11,7 +11,24 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os 
+# Library for getting the IP address
+import socket
 
+# Function to get the local IP address
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        s.connect(('8.8.8.8', 1))
+        IP = s.getsockname()[0]
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    print(f"IP Detectat: {IP}")
+    return IP
+
+LOCAL_IP = get_local_ip()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +42,7 @@ SECRET_KEY = 'django-insecure-p@w78n@^e1onxe(_a+@uv%6(8r=c8-!9gzt9tna=qi7)3qav5y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [LOCAL_IP, "127.0.0.1", "localhost", "10.240.18.107"]
 
 
 # Application definition
@@ -38,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp.apps.MyappConfig',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +145,21 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# PWA Configuration 
+PWA_PATH=os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
+
+PWA_APP_NAME="SmartQuiz"
+PWA_APPDESCRIPTION="Quiz Scan App"
+PWA_APP_THEME_COLOR="#003459";
+PWA_APP_BACKGROUND_COLOR="#003459";
+PWA_APP_DISPLAY="standalone";
+PWA_APP_START_URL="/";
+PWA_APP_STATUS_BAR_COLOR="default";
+PWA_APP_ICONS=[
+{
+    'src':"/static/MEDIA/logo1.png",
+    'sizes':"192x192",
+    'type':"image/png",
+}
+]
+
