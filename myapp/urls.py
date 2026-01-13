@@ -12,6 +12,13 @@ urlpatterns = [
     path('create-class/', views.create_class, name='create_class'),
     path('join-class/', views.join_class, name='join_class'),
     path('class/<int:class_id>/', views.class_detail, name='class_detail'),
-    path('my-grades/', views.my_grades, name='my_grades'),
+    path('class/<int:class_id>/my_grades/', views.my_grades, name='my_grades'),
     path('class/<int:class_id>/grades/', views.class_grades, name='class_grades'),
+    path('class/<int:class_id>/students/', views.class_students, name='class_students'),
+    path('test/<int:test_id>/scan/', views.scan_test, name='scan_test'),
+    path('class/<int:class_id>/create_test/', views.create_test, name='create_test'),
+    path('class/<int:class_id>/student/<int:student_id>/grades/', views.student_grades_view, name='student_grades_view'),    
+        
+    
+
 ]

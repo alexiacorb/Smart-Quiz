@@ -15,9 +15,6 @@
                 {% endif %}
             </div>
         </div>
-        {% if user.profile.role == 'student' %}
-        <a href="{% url 'my_grades' %}">My Grades</a>
-        {% endif %}
         <a href="{% url 'upcoming' %}">Upcoming tests</a>
         <a href="{% url 'feedback' %}">Feedback</a>
         <!-- Functie Django predefinita de log out -->

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Note {{ student.username }} - {{ class_obj.name }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/classes.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Stiluri simple pentru tabelul de note */
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .grades-table th, .grades-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .grades-table th {
+            background-color: #f8f9fa;
+            color: #003459;
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            background-color: #e3f2fd;
+            color: #007ea7;
+        }
+        .average-card {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #007ea7;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'features/navbar.html' %}
+
+    <main class="class-page">
+        <div class="central-card">
+            
+            <div class="card-header">
+                <a href="{% url 'class_students' class_obj.id %}" style="text-decoration: none; color: #666; font-size: 0.9rem; margin-bottom: 10px; display: inline-block;">
+                    <i class="fas fa-arrow-left"></i> Înapoi la studenți
+                </a>
+
+                <h1>Catalog: {{ student.username }}</h1>
+                <div class="class-meta">
+                    <span>Clasa: {{ class_obj.name }}</span>
+                    <span>Email: {{ student.email }}</span>
+                </div>
+            </div>
+
+            <div class="scrollable-content" style="padding: 20px;">
+                
+                {% if grades %}
+                    <div class="average-card">
+                        <h3>Media actuală: {{ average|floatformat:2 }}</h3>
+                    </div>
+
+                    <table class="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Data</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in grades %}
+                            <tr>
+                                <td>{{ grade.test.title }}</td> <td>{{ grade.test.date|date:"d M Y" }}</td>
+                                <td>
+                                    <span class="grade-badge">{{ grade.grade }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-state" style="text-align: center; padding: 40px; color: #888;">
+                        <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Acest student nu are note înregistrate încă.</p>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

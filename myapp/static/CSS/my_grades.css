@@ -1,0 +1,57 @@
+.grades-container {
+    display: grid;
+    gap: 20px;
+}
+
+.grade-card {
+    background: white;
+    border: 1px solid #88B9C6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(25, 26, 15, 0.1);
+    transition: transform 0.2s;
+}
+
+.grade-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(25, 26, 15, 0.15);
+}
+
+.grade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.grade-badge {
+    font-size: 28px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 50%;
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grade-badge.excellent { background-color: #2ecc71; box-shadow: 0 0 5px #2ecc71; }
+        .grade-badge.good { background-color: #3498db; }
+        .grade-badge.satisfactory { background-color: #f1c40f; }
+        .grade-badge.poor { background-color: #e74c3c; }
+
+.grade-notes {
+    color: #191A0F;
+    font-size: 14px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #E5E5E6;
+}
+
+.updated-at {
+    color: #003459;
+    font-size: 12px;
+    margin-top: 10px;
+}

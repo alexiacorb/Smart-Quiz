@@ -1,0 +1,40 @@
+/* --- CSS FORMULAR (Curățat de stilurile de "Cutie") --- */
+.create-container {
+    /* Doar restricții de dimensiune și poziționare */
+    max-width: 600px;
+    margin: 0 auto; 
+    width: 100%;
+}
+
+.form-group { margin-bottom: 20px; }
+
+label { 
+    display: block; 
+    font-weight: bold; 
+    margin-bottom: 8px; 
+    color: #003459; 
+}
+
+input[type="text"], input[type="datetime-local"], input[type="number"] {
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    /* Adăugat box-sizing pentru a nu depăși lățimea containerului */
+    box-sizing: border-box; 
+}
+
+/* ... Restul stilurilor pentru bule (grid-wrapper, bubble etc.) rămân la fel ... */
+.grid-wrapper { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.q-row { display: flex; align-items: center; gap: 15px; padding: 5px; border-bottom: 1px solid #eee; }
+.q-num { font-weight: bold; width: 30px; font-size: 1.1rem; }
+.bubble {
+    width: 40px; height: 40px; border-radius: 50%; border: 2px solid #003459;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-weight: bold; color: #003459; transition: 0.2s;
+}
+.bubble:hover { background-color: #e0e0e0; }
+.bubble.selected { background-color: #003459; color: white; border-color: #003459; }
+
+.btn-save { width: 100%; padding: 15px; background: #214E34; color: white; border: none; font-size: 1.1rem; cursor: pointer; border-radius: 5px; margin-top: 20px; }
+.btn-save:hover { background: #1a3e29; }

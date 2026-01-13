@@ -10,6 +10,7 @@
     {% progressive_web_app_meta %}
     <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/main_classes.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -17,31 +18,72 @@
     {% include 'features/navbar.html' %}
 
     <main class="class-page">
-        <section class="class-header">
-            <h1>{{ class_obj.name }}</h1>
-            <p class="class-details">{{ class_obj.details }}</p>
-            <p><strong>Teacher:</strong> {{ class_obj.teacher.username }}</p>
-            <p><strong>Code:</strong> {{ class_obj.code }}</p>
-            <p><strong>Created at:</strong> {{ class_obj.created_at }}</p>
-            {% if request.user == class_obj.teacher %}
-                <a href="{% url 'class_grades' class_obj.id %}" style="display: inline-block; margin-top: 15px; padding: 10px 15px; background: #333; color: white; text-decoration: none; border-radius: 5px;">View Grades</a>
-            {% endif %}
-        </section>
+        <div class="central-card">
+            
+            <div class="card-header">
+                <h1>{{ class_obj.name }}</h1>
+                <div class="class-meta">
+                    <span>Teacher: {{ class_obj.teacher.username }}</span> 
+                    <span>Code: {{ class_obj.code }}</span>
+                </div>
 
-        <section class="class-students">
-            <h2>Students</h2>
-            {% if students %}
-            <ul>
-                {% for s in students %}
-                <li>{{ s.username }}{% if s.email %} - {{ s.email }}{% endif %}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No students enrolled yet.</p>
-            {% endif %}
-        </section>
+                <nav class="card-nav">
+                    <a href="{% url 'class_detail' class_obj.id %}" class="nav-item">Flux</a>
+                    {% if request.user.profile.role == "teacher" %}
+                        <a href="{% url 'create_test' class_obj.id %}" class="nav-item">Create Test</a>
+                    {% else %}
+                    <a href="{% url 'my_grades' class_obj.id %}" class="nav-item">My Grades</a>
+                    {% endif %}
+                    <a href="{% url 'class_students' class_obj.id %}" class="nav-item active">Students</a>
+                </nav>
+            </div>
 
+            <div class="scrollable-content">
+                {% if tests %}
+        <div class="tests-container">
+            {% for test in tests %}
+            <div class="test-card">
+                <div class="test-header">
+                    <div class="test-info">
+                        <h4>Test {{ test.number }}</h4>
+                        <span class="test-date"><i class="far fa-calendar-alt"></i> {{ test.date|date:"d M Y" }}</span>
+                    </div>
+                    <div class="test-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                </div>
+
+                <div class="test-actions">
+                    
+                    {% if test.model_file %}
+                        <a href="{{ test.model_file.url }}" target="_blank" class="test-btn btn-model">
+                            <i class="fas fa-download"></i> Model test
+                        </a>
+                    {% else %}
+                        <button class="test-btn btn-disabled" disabled>Fără Model</button>
+                    {% endif %}
+                    <p>Status scanare: {{ test.has_scanned }}</p>
+                    {% if not test.has_scanned %} 
+                        <a href="{% url 'scan_test' test.id %}" class="test-btn btn-scan">
+                            <i class="fas fa-camera"></i> Scanare test
+                        </a>
+                    {% else %}
+                        <div class="scan-completed">
+                            <i class="fas fa-check-circle"></i> Test predat
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Nu există teste programate momentan.</p>
+    {% endif %}
+                
+            </div>
+        </div>
     </main>
 </body>
 
 </html>
+

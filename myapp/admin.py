@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Review, Class, Grade
+from .models import Profile, Review, Class, Grade, Test
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -24,3 +24,10 @@ class GradeAdmin(admin.ModelAdmin):
     search_fields = ('student__username', 'class_obj__name')
     list_filter = ('class_obj', 'updated_at')
     readonly_fields = ('updated_at',)
+
+@admin.register(Test)
+class TestAdmin(admin.ModelAdmin):
+    list_display = ('title', 'class_obj', 'date', 'created_at')
+    search_fields = ('title', 'class_obj__name')
+    list_filter = ('class_obj', 'date')
+    readonly_fields = ('created_at',)

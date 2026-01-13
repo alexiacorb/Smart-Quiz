@@ -1,0 +1,122 @@
+.action-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #191A0F;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.tests-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.test-card {
+    background: #fff;
+    border: 1px solid #88B9C6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(25, 26, 15, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 5px solid #003459;
+}
+
+.test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(25, 26, 15, 0.1);
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #88B9C6;
+}
+
+.test-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #191A0F;
+}
+
+.test-date {
+    font-size: 0.9rem;
+    color: #003459;
+    margin-top: 5px;
+    display: block;
+}
+
+.test-icon {
+    font-size: 1.5rem;
+    color: #003459;
+    background: #E5E5E6;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.test-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.test-btn {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-model {
+    background-color: #E5E5E6;
+    color: #191A0F;
+}
+
+.btn-model:hover {
+    background-color: #88B9C6;
+}
+
+.btn-scan {
+    background-color: #003459;
+    color: white;
+}
+
+.btn-scan:hover {
+    background-color: #191A0F;
+}
+
+.scan-completed {
+    flex: 1;
+    text-align: center;
+    color: #214E34;
+    font-weight: bold;
+    padding: 12px;
+    background: #E5E5E6;
+    border-radius: 6px;
+}
+
+.btn-disabled {
+    background-color: #E5E5E6;
+    color: #88B9C6;
+    cursor: not-allowed;
+}

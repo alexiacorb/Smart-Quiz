@@ -1,0 +1,69 @@
+.students-header-info {
+    padding: 15px 20px;
+    background-color: #E5E5E6;
+    border-bottom: 1px solid #88B9C6;
+    color: #003459;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.student-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.student-list li {
+    padding: 0;
+    border-bottom: 1px solid #E5E5E6;
+}
+
+.student-row-link,
+.student-row-static {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+
+.student-row-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.student-row-link:hover {
+    background-color: #E5E5E6;
+}
+
+.student-icon {
+    width: 45px;
+    height: 45px;
+    background-color: #E5E5E6;
+    color: #003459;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 15px;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.student-name {
+    font-weight: 600;
+    color: #191A0F;
+    font-size: 1rem;
+}
+
+.student-email {
+    font-size: 0.85rem;
+    color: #003459;
+    margin-top: 2px;
+}

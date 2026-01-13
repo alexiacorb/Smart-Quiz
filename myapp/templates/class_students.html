@@ -4,14 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Grades</title>
+    <title>Students - {{ class_obj.name }}</title>
     {% load static %}
-    {% load pwa %}
-    {% progressive_web_app_meta %}
     <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/main_classes.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'CSS/my_grades.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/class_students.css' %}">
 </head>
 
 <body>
@@ -39,43 +37,51 @@
             </div>
 
             <div class="scrollable-content">
-    
-    {% if grades %}
-        <div class="grades-container">
-            {% for grade in grades %}
-            <div class="grade-card">
-                <div class="grade-header">
+                
+                <div id="students-section" class="content-section">
                     
-                    <div class="grade-badge 
-                                {% if grade.grade >= 9 %}excellent
-                                {% elif grade.grade >= 7 %}good
-                                {% elif grade.grade >= 5 %}satisfactory
-                                {% else %}poor
-                                {% endif %}">
-                        {{ grade.grade }}
+                    <div class="students-header-info">
+                        Total students: {{ students.count }}
                     </div>
-                </div>
-                
-                {% if grade.notes %}
-                <div class="grade-notes">
-                    <strong>Feedback:</strong> {{ grade.notes }}
-                </div>
-                {% endif %}
-                
-                <div class="updated-at">
-                    <i class="far fa-clock"></i> {{ grade.updated_at|date:"d M Y, H:i" }}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="empty-state">
-            <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 15px; display: block; color: #ccc;"></i>
-            <p>You don't have any grades yet.</p>
-        </div>
-    {% endif %}
 
-</div>
+                    {% if students %}
+                        <ul class="student-list">
+    {% for s in students %}
+        <li>
+            {% if request.user.profile.role == "teacher" %}
+                <a href="#" class="student-row-link">
+            {% else %}
+                <div class="student-row-static">
+            {% endif %}
+
+                <div class="student-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                
+                <div class="student-info">
+                    <span class="student-name">{{ s.username }}</span>
+                    {% if s.email %}
+                        <span class="student-email">{{ s.email }}</span>
+                    {% endif %}
+                </div>
+
+            {% if request.user.profile.role == "teacher" %}
+                <a href="{% url 'student_grades_view' class_obj.id s.id %}" class="student-row-link">
+            {% else %}
+                </div>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-users-slash" style="font-size: 3rem; margin-bottom: 15px; color: #ddd;"></i>
+                            <p>No students enrolled yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
         </div>
     </main>
 </body>

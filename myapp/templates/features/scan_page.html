@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanare {{ test.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <style>
+        .scan-wrapper {
+            max-width: 500px; margin: 20px auto; text-align: center; padding: 20px;
+        }
+        .camera-input {
+            display: none; 
+        }
+        .camera-label {
+            display: block; width: 100%; padding: 40px;
+            background: #E5E5E6; border: 2px dashed #003459;
+            border-radius: 10px; cursor: pointer; margin-bottom: 20px;
+        }
+        .camera-label i { font-size: 50px; color: #003459; }
+        .submit-btn {
+            background: #214E34; color: white; padding: 15px 30px;
+            border: none; border-radius: 25px; font-size: 18px; width: 100%;
+        }
+    </style>
+</head>
+<body>
+    {% include 'features/navbar.html' %}
+    
+    <main class="scan-wrapper">
+        <h1>{{ test.title }}</h1>
+        <p>Te rog să încarci o poză clară a foii de răspuns.</p>
+
+        {% if error %}
+            <p style="color: red; font-weight: bold;">Eroare: {{ error }}</p>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="cameraUpload" class="camera-label">
+                <i class="fas fa-camera"></i>
+                <p>Apasă pentru a face poză</p>
+            </label>
+            
+            <input type="file" id="cameraUpload" name="test_image" 
+                   accept="image/*" capture="environment" class="camera-input" required 
+                   onchange="document.querySelector('.camera-label p').innerText = 'Poză selectată!'">
+
+            <button type="submit" class="submit-btn">Trimite pentru Corectare</button>
+        </form>
+    </main>
+</body>
+</html>

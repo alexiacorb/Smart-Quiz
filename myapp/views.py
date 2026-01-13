@@ -4,12 +4,93 @@ from django.contrib.auth import logout, authenticate, login as auth_login
 import calendar
 from datetime import datetime, date, timedelta
 #from myapp.models import Class, Test
-from .models import Review, Class, Grade
+from .models import Review, Class, Grade, Test, User
 from .forms import ReviewForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from .utils import extrage_raspunsuri, calculeaza_nota
+import json
+from django.utils.dateparse import parse_datetime
 
+def scan_test(request, test_id):
+    # Găsim testul specific
+    test_obj = get_object_or_404(Test, id=test_id)
+    class_obj = test_obj.class_obj
+
+    # Verificăm dacă a fost deja predat (securitate extra)
+    if Grade.objects.filter(test=test_obj, student=request.user).exists():
+        return redirect('class_detail', class_id=class_obj.id)
+
+    if request.method == 'POST':
+        uploaded_image = request.FILES.get('test_image')
+        
+        if uploaded_image:
+            # 1. Procesăm imaginea direct
+            # Nota: În producție, salvează fișierul temporar pe disc pentru OpenCV
+            import os
+            from django.core.files.storage import default_storage
+            from django.core.files.base import ContentFile
+            
+            # Salvăm imaginea temporar
+            path = default_storage.save(f'tmp/{uploaded_image.name}', ContentFile(uploaded_image.read()))
+            full_path = os.path.join(default_storage.location, path)
+
+            try:
+                # 2. Apelăm logica ta de OCR
+                rezultat_scanare = extrage_raspunsuri(full_path, 10) # Sau len(test_obj.correct_answers)
+
+                if "error" in rezultat_scanare:
+                     return render(request, 'features/scan_page.html', {
+                        'test': test_obj, 
+                        'error': rezultat_scanare['error']
+                    })
+
+                # 3. Calculăm nota pe baza grilei din Test
+                raport = calculeaza_nota(rezultat_scanare, test_obj.correct_answers)
+
+                # 4. Salvăm Nota
+                Grade.objects.create(
+                    student=request.user,
+                    class_obj=class_obj,
+                    test=test_obj,
+                    grade=raport['nota'],
+                    notes=f"Corecte: {raport['total_corecte']}",
+                    scanned_image=uploaded_image # Salvăm și poza finală
+                )
+                
+                # Ștergem fișierul temporar
+                os.remove(full_path)
+
+                return redirect('class_detail', class_id=class_obj.id)
+
+            except Exception as e:
+                return render(request, 'features/scan_page.html', {'test': test_obj, 'error': str(e)})
+
+    # Dacă e GET, afișăm pagina de upload
+    return render(request, 'features/scan_page.html', {'test': test_obj})
+
+def create_test(request, class_id):
+    class_obj = get_object_or_404(Class, id=class_id)
+    
+    if request.user != class_obj.teacher:
+        return redirect('class_detail', class_id=class_id)
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        date_str = request.POST.get('date')
+        answers_json = request.POST.get('answers_json') 
+
+        if title and date_str and answers_json:
+            Test.objects.create(
+                class_obj=class_obj,
+                title=title,
+                date=parse_datetime(date_str),
+                correct_answers=json.loads(answers_json) 
+            )
+            return redirect('class_detail', class_id=class_id)
+
+    return render(request, 'create_test.html', {'class_obj': class_obj})
 
 def login_user(request):
     if request.method == "POST":
@@ -109,15 +190,20 @@ def classes(request):
 @login_required(login_url='login')
 def class_detail(request, class_id):
     class_obj = get_object_or_404(Class, id=class_id)
-
+    tests= class_obj.tests.all().order_by('-date')
     # Only the class teacher or a student enrolled in the class can view details
     if request.user != class_obj.teacher and request.user not in class_obj.students.all():
         return HttpResponseForbidden("You don't have permission to view this class.")
-
+    if request.user.profile.role == 'student':
+        for test in tests:
+            test.has_scanned = Grade.objects.filter(
+                test=test, 
+                student=request.user
+            ).exists()
     students = class_obj.students.all()
-
     return render(request, 'class_detail.html', {
         'class_obj': class_obj,
+        'tests': tests,
         'students': students,
     })
 
@@ -237,13 +323,14 @@ def logout_view(request):
 
 
 @login_required(login_url='login')
-def my_grades(request):
+def my_grades(request,class_id):
+    class_obj = get_object_or_404(Class, id=class_id)
     if request.user.profile.role != "student":
         return HttpResponseForbidden("Only students can view their grades.")
     
     grades = Grade.objects.filter(student=request.user).select_related('class_obj')
     
-    return render(request, 'my_grades.html', {'grades': grades})
+    return render(request, 'my_grades.html', {'class_obj': class_obj, 'grades': grades})
 
 
 @login_required(login_url='login')
@@ -269,5 +356,42 @@ def class_grades(request, class_id):
     return render(request, 'class_grades.html', {
         'class_obj': class_obj,
         'student_grades': student_grades,
+        'students': students,
+    })
+
+
+def student_grades_view(request, class_id, student_id):
+    class_obj = get_object_or_404(Class, id=class_id)
+    
+    if request.user != class_obj.teacher:
+        return redirect('home') 
+    
+    student = get_object_or_404(User, id=student_id)
+    grades = Grade.objects.filter(student=student, test__class_associated=class_obj).order_by('test__date')
+    average = 0
+    if grades:
+        total = sum([g.grade for g in grades]) 
+        average = total / len(grades)
+
+    context = {
+        'class_obj': class_obj,
+        'student': student,
+        'grades': grades,
+        'average': average
+    }
+    
+    return render(request, 'student_grades.html', context)
+
+def class_students(request, class_id):
+    class_obj = get_object_or_404(Class, id=class_id)
+
+    # Only the class teacher or a student enrolled in the class can view details
+    if request.user != class_obj.teacher and request.user not in class_obj.students.all():
+        return HttpResponseForbidden("You don't have permission to view this class.")
+
+    students = class_obj.students.all()
+
+    return render(request, 'class_students.html', {
+        'class_obj': class_obj,
         'students': students,
     })
